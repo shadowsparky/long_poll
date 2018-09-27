@@ -12,19 +12,22 @@ interface VKLongPollApi {
             @Query("access_token") token: String,
             @Query("need_pts") pts: Boolean = true,
             @Query("lp_version") lp_version: Int = 2,
-//            @Query("access_token") token: String,
             @Query("v") version: Double = 5.85
-       //     @Query("extended") extended: Boolean = true
     ) : Observable<Response<GetLongPollResponse>>
 
-    @GET("/{method}")
+    @GET("method/messages.getLongPollHistory")
     fun getLongPoll(
-            @Path("method") method: String,
+//            @Path("method") method: String,
             @Query("key") key: String,
             @Query("ts") ts: Int,
-            @Query("wait") wait: Int = 25,
-            @Query("mode") mode: Int = 2,
-            @Query("version") version: Int = 2,
-            @Query("act") act: String = "a_check"
-    ) : Observable<Response<LongPollDataResponse>>
+            @Query("access_token") token: String,
+            @Query("preview_length") preview_length: Int = 20,
+            @Query("fields") fields: String = "photo,photo_medium_rec,sex,online,screen_name",
+            @Query("events_limit") events_limit: Int = 1000,
+            @Query("msgs_limit") msgs_limit: Int = 200,
+//            @Query("wait") wait: Int = 25,
+//            @Query("mode") mode: Int = 2,
+            @Query("version") version: Double = 5.85
+//            @Query("act") act: String = "a_check"
+    ) : Observable<Response<GetLongPollHistoryResponse>>
 }

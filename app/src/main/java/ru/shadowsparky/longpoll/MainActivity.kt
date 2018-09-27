@@ -48,18 +48,22 @@ class MainActivity : AppCompatActivity() {
         Log.println(DEBUG, "MAIN_TAG", "${it.raw().request().url()}")
         val response = it.body()!!.response
         val path = response.server.split('/')
-        initLongPoll(path[0], client)
-        val created = long_poll!!.create(VKLongPollApi::class.java)
-        while (true) {
+//        initLongPoll(path[0], client)
+        val created = retrofit!!.create(VKLongPollApi::class.java)
+           while (true) {
             try {
                 loggy("${path[1]}, ${response.key}, ${response.ts}")
-                val it2 = created.getLongPoll(path[1], response.key, response.ts).blockingFirst()
-                Log.println(DEBUG, "RESULT", "${it2.raw().request().url()}")
-                Log.println(DEBUG, "RESULT", "size ${it2.body()!!.updates}")
-                Log.println(DEBUG, "RESULT", "body ${it2.body()!!.ts}")
-                loggy("handled")
+                val it2 = created.getLongPoll(response.key, response.ts, TOKEN).blockingFirst()
+                loggy("${it2.raw().request().url()}")
+                loggy("history size ${it2.body()!!.response.history.size}")
+                loggy("messages size ${it2.body()!!.response.messages.size}")
+                loggy("count ${(it2.body()!!.response.messages[0] as Double)}")
+                loggy("profiles size ${it2.body()!!.response.profiles.size}")
+                loggy("pts ${it2.body()!!.response.new_pts}")
             } catch (e: Exception) {
                 loggy("EXCEPTION: $e")
+            } finally {
+                Thread.sleep(1000)
             }
         }
     }
